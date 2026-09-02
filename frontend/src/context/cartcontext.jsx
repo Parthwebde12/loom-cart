@@ -20,7 +20,7 @@ export function CartProvider({ children }) {
     fetch(`${apiUrl}/api/carts/${cartId}`)
       .then((response) => response.ok ? response.json() : Promise.reject(new Error('Could not load cart')))
       .then((cart) => setItems(cart.items || []))
-      .catch(() => {})
+      .catch((error) => console.error('Could not load cart:', error))
   }, [cartId])
 
   function persistCart(nextItems) {
@@ -28,7 +28,7 @@ export function CartProvider({ children }) {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ items: nextItems }),
-    }).catch(() => {})
+    }).catch((error) => console.error('Could not save cart:', error))
   }
 
   function addItem(product) {

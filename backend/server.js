@@ -17,7 +17,19 @@ dotenv.config({ path: '.env.local' })
 connectDB()
 
 const app = express()
-app.use(cors({ origin: process.env.CLIENT_ORIGIN || 'http://localhost:5173' }))
+const allowedOrigins = (process.env.CLIENT_ORIGIN || 'http://localhost:5173')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean)
+app.use(cors({
+  origin: (origin, callback) => {
+    const isVercelPreview = origin?.endsWith('.vercel.app')
+    if (!origin || allowedOrigins.includes(origin) || isVercelPreview || process.env.ALLOW_ALL_ORIGINS === 'true') {
+      return callback(null, true)
+    }
+    return callback(new Error('Origin is not allowed by CORS'))
+  },
+}))
 app.use(express.json())
 
 app.use('/api/auth', authRoutes)
