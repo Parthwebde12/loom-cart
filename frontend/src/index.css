@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap');
+
+@import "tailwindcss";
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #fbfaf7;
+  color: #2c3e50;
+  text-rendering: optimizeLegibility;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  transition: border-color 180ms ease, background-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #27ae60;
+  outline-offset: 2px;
+}
+
+.font-display {
+  font-family: 'Fraunces', serif;
+}
+
+.input-field {
+  width: 100%;
+  border: 1px solid #e5e5e5;
+  background-color: #ffffff;
+  color: #2c3e50;
+  padding: 0.625rem 0.75rem;
+  font-size: 0.875rem;
+  border-radius: 0.125rem;
+}
+
+.input-field::placeholder {
+  color: #7f8c8d;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #27ae60;
+  box-shadow: 0 0 0 1px #27ae60;
+}
+
+.btn-primary {
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.125rem;
+  background-color: #2c3e50;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+  background-color: #229954;
+}
+
+.btn-outline {
+  border: 1px solid #2c3e50;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.125rem;
+  color: #2c3e50;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-outline:hover {
+  background-color: #2c3e50;
+  color: #ffffff;
+}
+
+.star {
+  color: #C79A3A;
+}
