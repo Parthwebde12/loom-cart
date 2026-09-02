@@ -12,7 +12,7 @@ export default function Contact() {
         <div className="text-sm space-y-3 text-ink/80">
           <p><span className="text-stone">Store</span><br />14 Deccan Gymkhana, Pune, MH 411004</p>
           <p><span className="text-stone">Hours</span><br />Mon–Sat, 10am–8pm</p>
-          <p><span className="text-stone">Email</span><br />hello@loom-store.com</p>
+          <p><span className="text-stone">Email</span><br />hello@vyra-store.com</p>
         </div>
       </div>
 

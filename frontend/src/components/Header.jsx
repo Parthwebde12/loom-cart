@@ -26,7 +26,7 @@ export default function Header() {
         </div>
       </div>
       <div className="max-w-6xl mx-auto px-6 py-4 flex items-center gap-6">
-        <Link to="/" className="font-display text-2xl tracking-tight shrink-0" onClick={() => setMenuOpen(false)}>LOOM</Link>
+        <Link to="/" className="font-display text-2xl tracking-tight shrink-0" onClick={() => setMenuOpen(false)}>VYRA</Link>
         <nav className="hidden md:flex items-center gap-5 text-sm flex-1">
           {categories.map((c) => (
             <Link key={c} to={`/category/${c}`} className="text-ink/80 hover:text-ink">

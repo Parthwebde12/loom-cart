@@ -20,7 +20,7 @@ app.use('/api/products', productRoutes)
 app.use('/api/orders', orderRoutes)
 app.use('/api/contact', contactRoutes)
 
-app.get('/', (req, res) => res.send('LOOM API running'))
+app.get('/', (req, res) => res.send('VYRA API running'))
 
 const PORT = process.env.PORT || 5000;
 

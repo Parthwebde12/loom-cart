@@ -6,7 +6,7 @@ export default function Footer() {
     <footer className="border-t border-line mt-24">
       <div className="max-w-6xl mx-auto px-6 py-12 grid grid-cols-2 md:grid-cols-4 gap-8 text-sm">
         <div>
-          <div className="font-display text-xl mb-3">LOOM</div>
+          <div className="font-display text-xl mb-3">VYRA</div>
           <p className="text-stone text-sm leading-relaxed max-w-[22ch]">
             Everyday clothing and goods, made to wear in, not out.
           </p>
@@ -36,7 +36,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="border-t border-line py-4 text-center text-xs text-stone">
-        © 2026 LOOM. All rights reserved.
+        © 2026 VYRA. All rights reserved.
       </div>
     </footer>
   )
