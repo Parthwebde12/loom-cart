@@ -1,6 +1,9 @@
 import express from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
+import path from 'node:path'
+import { existsSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
 import { connectDB } from './config/db.js'
 
 import authRoutes from './routes/authRoutes.js'
@@ -20,7 +23,16 @@ app.use('/api/products', productRoutes)
 app.use('/api/orders', orderRoutes)
 app.use('/api/contact', contactRoutes)
 
-app.get('/', (req, res) => res.send('VYRA API running'))
+app.get('/api/health', (req, res) => res.send('VYRA API running'))
+
+const frontendDistPath = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../frontend/dist')
+const frontendEntryPath = path.join(frontendDistPath, 'index.html')
+
+app.use(express.static(frontendDistPath))
+app.get('*', (req, res, next) => {
+  if (!existsSync(frontendEntryPath)) return next()
+  res.sendFile(frontendEntryPath)
+})
 
 const PORT = process.env.PORT || 5000;
 
