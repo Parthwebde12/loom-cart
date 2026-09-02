@@ -13,6 +13,7 @@ export default function Payment() {
   const [method, setMethod] = useState('card')
   const [details, setDetails] = useState({ cardNumber: '', expiry: '', cvv: '', upiId: '', bank: '', wallet: '' })
   const [isProcessing, setIsProcessing] = useState(false)
+  const [error, setError] = useState('')
   const { items, subtotal, shipping, tax, total } = useCart()
   const navigate = useNavigate()
 
@@ -23,23 +24,39 @@ export default function Payment() {
   function handlePayment(event) {
     event.preventDefault()
     setIsProcessing(true)
+    setError('')
 
-    window.setTimeout(() => {
+    window.setTimeout(async () => {
       const orderId = `DC-${Math.floor(100000 + Math.random() * 900000)}`
-      navigate('/order-placed', {
-        state: {
-          receipt: {
-            orderId,
-            date: new Date().toLocaleDateString(),
-            method: methods.find((item) => item.id === method).label,
-            items,
-            subtotal,
-            shipping,
-            tax,
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://loom-cart-2.onrender.com'}/api/orders`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            items: items.map(({ id, name, price, qty }) => ({ productId: id, name, price, quantity: qty })),
             total,
+            shippingAddress: 'Provided at checkout',
+          }),
+        })
+        if (!response.ok) throw new Error('Could not save order')
+        navigate('/order-placed', {
+          state: {
+            receipt: {
+              orderId,
+              date: new Date().toLocaleDateString(),
+              method: methods.find((item) => item.id === method).label,
+              items,
+              subtotal,
+              shipping,
+              tax,
+              total,
+            },
           },
-        },
-      })
+        })
+      } catch (paymentError) {
+        setError(paymentError.message)
+        setIsProcessing(false)
+      }
     }, 900)
   }
 
@@ -105,6 +122,7 @@ export default function Payment() {
 
         <form onSubmit={handlePayment}>
           {renderPaymentFields()}
+          {error && <p className="text-sm text-clay mt-4" role="alert">{error}</p>}
           <p className="text-xs text-stone mt-5">Demo gateway: no real payment will be charged.</p>
           <button disabled={isProcessing} className="btn-primary w-full mt-5 disabled:opacity-60">
             {isProcessing ? 'Processing payment...' : `Pay $${total.toFixed(2)}`}

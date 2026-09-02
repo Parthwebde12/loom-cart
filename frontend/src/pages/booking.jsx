@@ -15,6 +15,26 @@ export default function Booking() {
   const [selectedDate, setSelectedDate] = useState(12)
   const [selectedSlot, setSelectedSlot] = useState('1:00 PM')
   const [confirmed, setConfirmed] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
+  const [error, setError] = useState('')
+
+  async function confirmBooking() {
+    setIsSaving(true)
+    setError('')
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://loom-cart-2.onrender.com'}/api/bookings`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ date: `June ${selectedDate}, 2026`, time: selectedSlot }),
+      })
+      if (!response.ok) throw new Error('Could not save booking')
+      setConfirmed(true)
+    } catch (bookingError) {
+      setError(bookingError.message)
+    } finally {
+      setIsSaving(false)
+    }
+  }
 
   if (confirmed) {
     return (
@@ -67,7 +87,10 @@ export default function Booking() {
         ))}
       </div>
 
-      <button onClick={() => setConfirmed(true)} className="btn-primary w-full mt-8">Confirm booking</button>
+      {error && <p className="text-sm text-clay mt-4" role="alert">{error}</p>}
+      <button onClick={confirmBooking} disabled={isSaving} className="btn-primary w-full mt-8 disabled:opacity-60">
+        {isSaving ? 'Saving booking...' : 'Confirm booking'}
+      </button>
     </div>
   )
 }

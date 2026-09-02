@@ -1,33 +1,63 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { CartContext } from './CartContextProvider.jsx'
 
 const initialItems = []
+const apiUrl = import.meta.env.VITE_API_URL || 'https://loom-cart-2.onrender.com'
+
+function getCartId() {
+  const existingId = window.localStorage.getItem('vyra-cart-id')
+  if (existingId) return existingId
+  const newId = crypto.randomUUID()
+  window.localStorage.setItem('vyra-cart-id', newId)
+  return newId
+}
 
 export function CartProvider({ children }) {
   const [items, setItems] = useState(initialItems)
+  const [cartId] = useState(getCartId)
+
+  useEffect(() => {
+    fetch(`${apiUrl}/api/carts/${cartId}`)
+      .then((response) => response.ok ? response.json() : Promise.reject(new Error('Could not load cart')))
+      .then((cart) => setItems(cart.items || []))
+      .catch(() => {})
+  }, [cartId])
+
+  function persistCart(nextItems) {
+    fetch(`${apiUrl}/api/carts/${cartId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ items: nextItems }),
+    }).catch(() => {})
+  }
 
   function addItem(product) {
     setItems((prev) => {
       const existing = prev.find(
         (i) => i.id === product.id && i.size === product.size && i.color === product.color
       )
-      if (existing) {
-        return prev.map((i) =>
-          i === existing ? { ...i, qty: i.qty + product.qty } : i
-        )
-      }
-      return [...prev, product]
+      const nextItems = existing
+        ? prev.map((i) => i === existing ? { ...i, qty: i.qty + product.qty } : i)
+        : [...prev, product]
+      persistCart(nextItems)
+      return nextItems
     })
   }
 
   function updateQty(index, qty) {
-    setItems((prev) =>
-      prev.map((i, idx) => (idx === index ? { ...i, qty: Math.max(1, qty) } : i))
-    )
+    setItems((prev) => {
+      const nextItems = prev.map((i, idx) => (idx === index ? { ...i, qty: Math.max(1, qty) } : i))
+      persistCart(nextItems)
+      return nextItems
+    })
   }
 
   function removeItem(index) {
-    setItems((prev) => prev.filter((_, idx) => idx !== index))
+    setItems((prev) => {
+      const nextItems = prev.filter((_, idx) => idx !== index)
+      persistCart(nextItems)
+      return nextItems
+    })
   }
 
   const subtotal = useMemo(

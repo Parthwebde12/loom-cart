@@ -10,6 +10,8 @@ import authRoutes from './routes/authRoutes.js'
 import productRoutes from './routes/productRoutes.js'
 import orderRoutes from './routes/orderRoutes.js'
 import contactRoutes from './routes/contactRoutes.js'
+import bookingRoutes from './routes/bookingRoutes.js'
+import cartRoutes from './routes/cartRoutes.js'
 
 dotenv.config({ path: '.env.local' })
 connectDB()
@@ -22,6 +24,8 @@ app.use('/api/auth', authRoutes)
 app.use('/api/products', productRoutes)
 app.use('/api/orders', orderRoutes)
 app.use('/api/contact', contactRoutes)
+app.use('/api/bookings', bookingRoutes)
+app.use('/api/carts', cartRoutes)
 
 app.get('/', (req, res) => res.send('VYRA API running'))
 app.get('/api/health', (req, res) => res.send('VYRA API running'))
