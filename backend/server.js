@@ -23,6 +23,7 @@ app.use('/api/products', productRoutes)
 app.use('/api/orders', orderRoutes)
 app.use('/api/contact', contactRoutes)
 
+app.get('/', (req, res) => res.send('VYRA API running'))
 app.get('/api/health', (req, res) => res.send('VYRA API running'))
 
 const frontendDistPath = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../frontend/dist')
